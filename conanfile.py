@@ -40,7 +40,8 @@ class GmpConan(ConanFile):
                 new_str = '-install_name \\$soname'
                 replace_in_file("%s/%s/configure" % (self.conanfile_directory, self.sources_folder), old_str, new_str)
 
-            self.run("%s && chmod +x ./configure && ./configure%s" % (cd_build, " --disable-assembly" if self.options.disable_assembly else ""))
+            self.run("%s && chmod +x ./configure && ./configure%s%s" % (cd_build, " --disable-assembly" if self.options.disable_assembly else "",
+                                                                        " --disable-static" if self.options.shared else " --disable-shared"))
             self.run("%s && make" % cd_build)
             # According to the gmp readme file, make check should not be omitted
             self.run("%s && make check" % cd_build)
