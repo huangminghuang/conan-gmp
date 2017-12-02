@@ -40,10 +40,10 @@ class GmpConan(ConanFile):
                 new_str = '-install_name \\$soname'
                 replace_in_file("%s/%s/configure" % (self.conanfile_directory, self.sources_folder), old_str, new_str)
 
-            self.run("%s && chmod +x ./configure && ./configure" % cd_build)
+            self.run("%s && chmod +x ./configure && ./configure --disable-assembly" % cd_build)
             self.run("%s && make" % cd_build)
             # According to the gmp readme file, make check should not be omitted
-            # self.run("%s && make check" % cd_build)
+            self.run("%s && make check" % cd_build)
 
     def package(self):
         self.copy("copying*", dst="licenses", src=self.sources_dir, ignore_case=True, keep_path=False)
