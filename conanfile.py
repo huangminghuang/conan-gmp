@@ -49,11 +49,10 @@ class GmpConan(ConanFile):
         self.copy("copying*", dst="licenses", src=self.sources_dir, ignore_case=True, keep_path=False)
         self.copy(pattern="gmp.h", dst="include", src=self.sources_dir)
         if self.options.shared:
-            self.copy(pattern="libgmp.so*", dst="lib", keep_path=False)
-            self.copy(pattern="libgmp.dylib", dst="lib", keep_path=False)
+            self.copy(pattern="libgmp.so*", dst="lib", src="%s/.libs" % self.sources_dir, keep_path=False)
+            self.copy(pattern="libgmp.dylib", dst="lib", src="%s/.libs" % self.sources_dir, keep_path=False)
         else:
-            self.copy(pattern="libgmp.a", dst="lib", keep_path=False)
-            self.copy(pattern="libgmp.la", dst="lib", keep_path=False)
+            self.copy(pattern="libgmp.a", dst="lib", src="%s/.libs" % self.sources_dir, keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
