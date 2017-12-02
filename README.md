@@ -27,7 +27,7 @@ Complete the installation of requirements for your project running:
 
     $ mkdir build && cd build && conan install ..
 
-In order to enable assembly code, making the library run much faster turn off the `disable_assembly` option:
+In order to enable assembly code, making the library run much faster, turn off the `disable_assembly` option:
 
 	$ mkdir build && cd build && conan install .. -o gmp:disable_assembly=False
 	
