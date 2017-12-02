@@ -13,7 +13,7 @@ class GmpConan(ConanFile):
     generators = "txt"
     description = "GMP is a free library for arbitrary precision arithmetic, operating on signed integers, rational numbers, and floating-point numbers."
     license = "https://github.com/bincrafters/conan-gmp/blob/master/LICENSE"
-    exports_sources = ["CMakeLists.txt", "LICENSE"]
+    exports_sources = ["CMakeLists.txt", "LICENSE", "FindGMP.cmake"]
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "fPIC": [True, False]}
     default_options = "shared=False", "fPIC=True"
@@ -48,6 +48,7 @@ class GmpConan(ConanFile):
     def package(self):
         self.copy("copying*", dst="licenses", src=self.sources_dir, ignore_case=True, keep_path=False)
         self.copy(pattern="gmp.h", dst="include", src=self.sources_dir)
+        self.copy("FindGMP.cmake")
         if self.options.shared:
             self.copy(pattern="libgmp.so*", dst="lib", src="%s/.libs" % self.sources_dir, keep_path=False)
             self.copy(pattern="libgmp.dylib", dst="lib", src="%s/.libs" % self.sources_dir, keep_path=False)
