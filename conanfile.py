@@ -15,8 +15,8 @@ class GmpConan(ConanFile):
     license = "https://github.com/bincrafters/conan-gmp/blob/master/LICENSE"
     exports_sources = ["CMakeLists.txt", "LICENSE", "FindGMP.cmake"]
     settings = "os", "arch", "compiler", "build_type"
-    options = {"shared": [True, False], "fPIC": [True, False], "disable_assembly": [True, False]}
-    default_options = "shared=False", "fPIC=True", "disable_assembly=True"
+    options = {"shared": [True, False], "fPIC": [True, False], "disable_assembly": [True, False], "run_checks": [True, False]}
+    default_options = "shared=False", "fPIC=True", "disable_assembly=True", "run_checks=False"
     requires = ""
 
     def configure(self):
@@ -43,8 +43,9 @@ class GmpConan(ConanFile):
             self.run("%s && chmod +x ./configure && ./configure%s%s" % (cd_build, " --disable-assembly" if self.options.disable_assembly else "",
                                                                         " --disable-static" if self.options.shared else " --disable-shared"))
             self.run("%s && make" % cd_build)
-            # According to the gmp readme file, make check should not be omitted
-            self.run("%s && make check" % cd_build)
+            # According to the gmp readme file, make check should not be omitted, but it causes timeouts on the CI server.
+            if self.options.run_checks:
+                self.run("%s && make check" % cd_build)
 
     def package(self):
         self.copy("copying*", dst="licenses", src=self.sources_dir, ignore_case=True, keep_path=False)
