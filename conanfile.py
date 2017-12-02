@@ -15,8 +15,8 @@ class GmpConan(ConanFile):
     license = "https://github.com/bincrafters/conan-gmp/blob/master/LICENSE"
     exports_sources = ["CMakeLists.txt", "LICENSE", "FindGMP.cmake"]
     settings = "os", "arch", "compiler", "build_type"
-    options = {"shared": [True, False], "fPIC": [True, False]}
-    default_options = "shared=False", "fPIC=True"
+    options = {"shared": [True, False], "fPIC": [True, False], "disable_assembly": [True, False]}
+    default_options = "shared=False", "fPIC=True", "disable_assembly=True"
     requires = ""
 
     def configure(self):
@@ -40,7 +40,7 @@ class GmpConan(ConanFile):
                 new_str = '-install_name \\$soname'
                 replace_in_file("%s/%s/configure" % (self.conanfile_directory, self.sources_folder), old_str, new_str)
 
-            self.run("%s && chmod +x ./configure && ./configure --disable-assembly" % cd_build)
+            self.run("%s && chmod +x ./configure && ./configure%s" % (cd_build, " --disable-assembly" if self.options.disable_assembly else ""))
             self.run("%s && make" % cd_build)
             # According to the gmp readme file, make check should not be omitted
             self.run("%s && make check" % cd_build)
