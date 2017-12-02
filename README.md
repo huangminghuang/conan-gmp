@@ -6,6 +6,8 @@
 
 The packages generated with this **conanfile** can be found in [Bintray](https://bintray.com/bincrafters/public-conan/gmp%3Abincrafters).
 
+Note: Unfortunately, there is no build configuration for Windows provided for gmp by the gmp development team, so this conan package cannot be deployed on Windows.
+
 ## For Users: Use this package
 
 ### Basic setup

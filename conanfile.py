@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from conans import ConanFile, tools
+from conans import ConanFile, tools, AutoToolsBuildEnvironment
 import os
 
 
@@ -30,17 +30,30 @@ class GmpConan(ConanFile):
         os.rename(extracted_dir, self.sources_dir)
 
     def build(self):
-        self.output.info("And now we build")
+        base_path = ("%s/" % self.conanfile_directory)
+        cd_build = "cd %s%s" % (base_path, self.sources_dir)
+        env = AutoToolsBuildEnvironment(self)
+        env.fpic = self.options.fPIC 
+        with tools.environment_append(env.vars):
+            if self.settings.os == "Macos":
+                old_str = '-install_name \\$rpath/\\$soname'
+                new_str = '-install_name \\$soname'
+                replace_in_file("%s/%s/configure" % (self.conanfile_directory, self.sources_folder), old_str, new_str)
+
+            self.run("%s && chmod +x ./configure && ./configure" % cd_build)
+            self.run("%s && make" % cd_build)
+            # According to the gmp readme file, make check should not be omitted
+            # self.run("%s && make check" % cd_build)
 
     def package(self):
-        with tools.chdir("sources"):
-            self.copy(pattern="LICENSE")
-            self.copy(pattern="*", dst="include", src="include")
-            self.copy(pattern="*.dll", dst="bin", src="bin", keep_path=False)
-            self.copy(pattern="*.lib", dst="lib", src="lib", keep_path=False)
-            self.copy(pattern="*.a", dst="lib", src="lib", keep_path=False)
-            self.copy(pattern="*.so*", dst="lib", src="lib", keep_path=False)
-            self.copy(pattern="*.dylib", dst="lib", src="lib", keep_path=False)
+        self.copy("copying*", dst="licenses", src=self.sources_dir, ignore_case=True, keep_path=False)
+        self.copy(pattern="gmp.h", dst="include", src=self.sources_dir)
+        if self.options.shared:
+            self.copy(pattern="libgmp.so*", dst="lib", keep_path=False)
+            self.copy(pattern="libgmp.dylib", dst="lib", keep_path=False)
+        else:
+            self.copy(pattern="libgmp.a", dst="lib", keep_path=False)
+            self.copy(pattern="libgmp.la", dst="lib", keep_path=False)
 
     def package_info(self):
         self.cpp_info.libs = tools.collect_libs(self)
