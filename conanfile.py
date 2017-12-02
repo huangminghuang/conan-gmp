@@ -38,7 +38,7 @@ class GmpConan(ConanFile):
             if self.settings.os == "Macos":
                 old_str = '-install_name \\$rpath/\\$soname'
                 new_str = '-install_name \\$soname'
-                replace_in_file("%s/%s/configure" % (self.conanfile_directory, self.sources_folder), old_str, new_str)
+                tools.replace_in_file("%s/%s/configure" % (self.conanfile_directory, self.sources_dir), old_str, new_str)
 
             self.run("%s && chmod +x ./configure && ./configure%s%s" % (cd_build, " --disable-assembly" if self.options.disable_assembly else "",
                                                                         " --disable-static" if self.options.shared else " --disable-shared"))
@@ -53,6 +53,7 @@ class GmpConan(ConanFile):
         if self.options.shared:
             self.copy(pattern="libgmp.so*", dst="lib", src="%s/.libs" % self.sources_dir, keep_path=False)
             self.copy(pattern="libgmp.dylib", dst="lib", src="%s/.libs" % self.sources_dir, keep_path=False)
+            self.copy(pattern="libgmp.10.dylib", dst="lib", src="%s/.libs" % self.sources_dir, keep_path=False)
         else:
             self.copy(pattern="libgmp.a", dst="lib", src="%s/.libs" % self.sources_dir, keep_path=False)
 
