@@ -1,59 +1,47 @@
-[ ![Download](https://api.bintray.com/packages/bincrafters/public-conan/gmp%3Abincrafters/images/download.svg) ](https://bintray.com/bincrafters/public-conan/gmp%3Abincrafters/_latestVersion)
-[![Build Status](https://travis-ci.org/bincrafters/conan-gmp.svg?branch=stable%2F6.1.2)](https://travis-ci.org/bincrafters/conan-gmp)
+## Package Status
 
-[Conan.io](https://conan.io) package for [gmp](https://gmplib.org/) project
+| Bintray | Appveyor | Travis |
+|---------|-----------|--------|
+[![Download](https://api.bintray.com/packages/bincrafters/public-conan/gmp%3Abincrafters/images/download.svg)](https://bintray.com/bincrafters/public-conan/gmp%3Abincrafters/_latestVersion)|None|[![Build Status](https://travis-ci.org/bincrafters/conan-gmp.svg?branch=stable%2F6.1.2)](https://travis-ci.org/bincrafters/conan-gmp)|
 
-The packages generated with this **conanfile** can be found in [Bintray](https://bintray.com/bincrafters/public-conan/gmp%3Abincrafters).
+## Conan.io Information
 
-Note: Unfortunately, there is no build configuration for Windows provided for gmp by the gmp development team, so this conan package cannot be deployed on Windows.
+Bincrafters packages can be found in the following public Conan repository:
 
-## For Users: Use this package
+[Bincrafters Public Conan Repository on Bintray](https://bintray.com/bincrafters/public-conan)
 
-### Basic setup
+*Note: You can click the "Set Me Up" button on the Bintray page above for instructions on using packages from this repository.*
 
-    $ conan install gmp/6.1.2@bincrafters/stable
+## Issues
 
-### Project setup
+If you wish to report an issue or make a request for a Bincrafters package, please do so here:
 
-If you handle multiple dependencies in your project is better to add a *conanfile.txt*
+[Bincrafters Community Issues](https://github.com/bincrafters/community/issues)
 
-    [requires]
-    gmp/6.1.2@bincrafters/stable
+## General Information
 
-    [generators]
-    txt
+This GIT repository is managed by the Bincrafters team and holds files related to Conan.io.  For detailed information about Bincrafters and Conan.io, please visit the following resources:
 
-Complete the installation of requirements for your project running:
+[Bincrafters Wiki - Common README](https://github.com/bincrafters/community/wiki/Common-README.md)
 
-    $ mkdir build && cd build && conan install ..
+[Bincrafters Technical Documentation](http://bincrafters.readthedocs.io/en/latest/)
 
-In order to enable assembly code, making the library run much faster, turn off the `disable_assembly` option:
+[Bincrafters Blog](https://bincrafters.github.io)
 
-	$ mkdir build && cd build && conan install .. -o gmp:disable_assembly=False
-	
-The normal building procedure of gmp runs some checks to make sure that everything has been properly compiled. It is highly recommended that these checks are executed, in order to avoid calculation problems when using the library, but they have been disabled on travis because they cause timeouts to the builds (they take too long). If you want to be 100% certain that you are using a properly compiled gmp library you need to enable them and build locally:
+## License Information
 
-	$ mkdir build && cd build && conan install .. -o gmp:run_checks=True --build gmp
+Bincrafters packages are hosted on [Bintray](https://bintray.com) and contain Open-Source software which is licensed by the software's maintainers and NOT Bincrafters.  For each Open-Source package published by Bincrafters, the packaging process obtains the required license files along with the original source files from the maintainer, and includes these license files in the generated Conan packages.
 
-Note: It is recommended that you run conan install from a build directory and not the root of the project directory.  This is because conan generates *conanbuildinfo* files specific to a single build configuration which by default comes from an autodetected default profile located in ~/.conan/profiles/default .  If you pass different build configuration options to conan install, it will generate different *conanbuildinfo* files.  Thus, they should not be added to the root of the project, nor committed to git.
+The contents of this GIT repository are completely separate from the software being packaged and therefor licensed separately.  The license for all files contained in this GIT repository are defined in the [LICENSE.md](LICENSE.md) file in this repository.  The licenses included with all Conan packages published by Bincrafters can be found in the Conan package directories in the following locations, relative to the Conan Cache root (`~/.conan` by default):
 
-## For Packagers: Publish this Package
+### License(s) for packaged software:
 
-The example below shows the commands used to publish to bincrafters conan repository. To publish to your own conan respository (for example, after forking this git repository), you will need to change the commands below accordingly.
+    ~/.conan/data/gmp/6.1.2/bincrafters/package/a4f6c4cfba391492265533621e6784b527c7c34b/licenses/COPYING
 
-## Build and package
+*Note :   The most common filenames for OSS licenses are `LICENSE` AND `COPYING` without file extensions.*
 
-The following command both runs all the steps of the conan file, and publishes the package to the local system cache.  This includes downloading dependencies from "build_requires" and "requires" , and then running the build() method.
+### License for Bincrafters recipe:
 
-    $ conan create bincrafters/stable
+    ~/.conan/data/gmp/6.1.2/bincrafters/stable/export/LICENSE.md
 
-## Add Remote
 
-    $ conan remote add bincrafters "https://api.bintray.com/conan/bincrafters/public-conan"
-
-## Upload
-
-    $ conan upload gmp/6.1.2@bincrafters/stable --all -r bincrafters
-
-## License
-[LGPLv3](https://www.gnu.org/licenses/lgpl.html) | [GPLv2](https://www.gnu.org/licenses/gpl-2.0.html)
