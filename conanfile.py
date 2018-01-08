@@ -12,8 +12,9 @@ class GmpConan(ConanFile):
     sources_dir = "sources"
     generators = "txt"
     description = "GMP is a free library for arbitrary precision arithmetic, operating on signed integers, rational numbers, and floating-point numbers."
-    license = "https://github.com/bincrafters/conan-gmp/blob/master/LICENSE"
-    exports_sources = ["CMakeLists.txt", "LICENSE", "FindGMP.cmake"]
+    license = "GNU LGPL v3, GNU GPL v2"
+    exports = ["LICENSE.md"]
+    exports_sources = ["CMakeLists.txt", "FindGMP.cmake"]
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "fPIC": [True, False], "disable_assembly": [True, False], "run_checks": [True, False]}
     default_options = "shared=False", "fPIC=True", "disable_assembly=True", "run_checks=False"
@@ -48,7 +49,9 @@ class GmpConan(ConanFile):
                 self.run("%s && make check" % cd_build)
 
     def package(self):
-        self.copy("copying*", dst="licenses", src=self.sources_dir, ignore_case=True, keep_path=False)
+        # dual license
+        self.copy("COPYINGv2", dst="licenses", src=self.sources_dir, ignore_case=True, keep_path=False)
+        self.copy("COPYING.LESSERv3", dst="licenses", src=self.sources_dir, ignore_case=True, keep_path=False)
         self.copy(pattern="gmp.h", dst="include", src=self.sources_dir)
         self.copy("FindGMP.cmake")
         if self.options.shared:
