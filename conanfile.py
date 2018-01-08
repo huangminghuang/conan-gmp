@@ -22,8 +22,8 @@ class GmpConan(ConanFile):
     requires = ""
 
     def configure(self):
-        if self.settings.os == "Windows":
-            raise tools.ConanException("The gmp package cannot be deployed on Windows.")
+        if self.settings.compiler == "Visual Studio":
+            raise tools.ConanException("The gmp package cannot be deployed on Visual Studio.")
 
     def source(self):
         source_url = "https://gmplib.org/download/gmp"
@@ -32,22 +32,31 @@ class GmpConan(ConanFile):
         os.rename(extracted_dir, self.sources_dir)
 
     def build(self):
-        base_path = ("%s/" % self.conanfile_directory)
-        cd_build = "cd %s%s" % (base_path, self.sources_dir)
-        env = AutoToolsBuildEnvironment(self)
-        env.fpic = self.options.fPIC 
-        with tools.environment_append(env.vars):
-            if self.settings.os == "Macos":
-                old_str = '-install_name \\$rpath/\\$soname'
-                new_str = '-install_name \\$soname'
-                tools.replace_in_file("%s/%s/configure" % (self.conanfile_directory, self.sources_dir), old_str, new_str)
+        env_build = AutoToolsBuildEnvironment(self)
+        env_build.fpic = self.options.fPIC
+        with tools.environment_append(env_build.vars):
 
-            self.run("%s && chmod +x ./configure && ./configure%s%s" % (cd_build, " --disable-assembly" if self.options.disable_assembly else "",
-                                                                        " --disable-static" if self.options.shared else " --disable-shared"))
-            self.run("%s && make" % cd_build)
-            # According to the gmp readme file, make check should not be omitted, but it causes timeouts on the CI server.
-            if self.options.run_checks:
-                self.run("%s && make check" % cd_build)
+            with tools.chdir(self.sources_dir):
+
+                if self.settings.os == "Macos":
+                    tools.replace_in_file("configure", r"-install_name \$rpath/", "-install_name ")
+
+                self.run("chmod +x configure")
+
+                configure_args = []
+                if self.options.disable_assembly:
+                    configure_args.append('--disable-assembly')
+                if self.options.shared:
+                    configure_args.extend(["--enable-shared", "--disable-static"])
+                else:
+                    configure_args.extend(["--disable-shared", "--enable-static"])
+
+                env_build.configure(args=configure_args)
+                env_build.make()
+
+                # According to the gmp readme file, make check should not be omitted, but it causes timeouts on the CI server.
+                if self.options.run_checks:
+                    env_build.make(args=['check'])
 
     def package(self):
         # dual license
@@ -58,7 +67,7 @@ class GmpConan(ConanFile):
         if self.options.shared:
             self.copy(pattern="libgmp.so*", dst="lib", src="%s/.libs" % self.sources_dir, keep_path=False)
             self.copy(pattern="libgmp.dylib", dst="lib", src="%s/.libs" % self.sources_dir, keep_path=False)
-            self.copy(pattern="libgmp.10.dylib", dst="lib", src="%s/.libs" % self.sources_dir, keep_path=False)
+            self.copy(pattern="libgmp.*.dylib", dst="lib", src="%s/.libs" % self.sources_dir, keep_path=False)
         else:
             self.copy(pattern="libgmp.a", dst="lib", src="%s/.libs" % self.sources_dir, keep_path=False)
 
