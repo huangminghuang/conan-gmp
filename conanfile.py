@@ -14,7 +14,7 @@ class GmpConan(ConanFile):
     description = "GMP is a free library for arbitrary precision arithmetic, operating on signed integers, rational numbers, and floating-point numbers."
     license = "GNU LGPL v3, GNU GPL v2"
     exports = ["LICENSE.md"]
-    exports_sources = ["CMakeLists.txt", "FindGMP.cmake"]
+    exports_sources = ["FindGMP.cmake"]
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "fPIC": [True, False], "disable_assembly": [True, False], "run_checks": [True, False]}
     default_options = "shared=False", "fPIC=True", "disable_assembly=True", "run_checks=False"
