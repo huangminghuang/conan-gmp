@@ -20,7 +20,6 @@ if [[ "$(uname -s)" == 'Darwin' ]]; then
 fi
 
 pip install conan --upgrade
-pip install conan_package_tools
-pip install bincrafters-package-tools
+pip install conan_package_tools bincrafters_package_tools
 
 conan user
