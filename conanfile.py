@@ -12,7 +12,7 @@ class GmpConan(ConanFile):
     generators = "txt"
     description = "GMP is a free library for arbitrary precision arithmetic, operating on signed integers, rational numbers, and floating-point numbers."
     website = "https://gmplib.org"
-    license = "GNU LGPL v3, GNU GPL v2"
+    license = "LGPL-3.0, GPL-2.0"
     exports = ["LICENSE.md"]
     exports_sources = ["FindGMP.cmake"]
     settings = "os", "arch", "compiler", "build_type"
