@@ -8,18 +8,16 @@ import os
 class GmpConan(ConanFile):
     name = "gmp"
     version = "6.1.2"
-    url = "https://gmplib.org/"
-    generators = "txt"
+    url = "https://github.com/bincrafters/conan-gmp"
     description = "GMP is a free library for arbitrary precision arithmetic, operating on signed integers, rational numbers, and floating-point numbers."
     website = "https://gmplib.org"
     license = "LGPL-3.0, GPL-2.0"
     exports = ["LICENSE.md"]
     exports_sources = ["FindGMP.cmake"]
+    source_subfolder = "source_subfolder"
     settings = "os", "arch", "compiler", "build_type"
     options = {"shared": [True, False], "fPIC": [True, False], "disable_assembly": [True, False], "run_checks": [True, False]}
     default_options = "shared=False", "fPIC=True", "disable_assembly=True", "run_checks=False"
-
-    source_subfolder = "source_subfolder"
 
     def configure(self):
         if self.settings.compiler == "Visual Studio":
@@ -60,8 +58,8 @@ class GmpConan(ConanFile):
 
     def package(self):
         # dual license
-        self.copy("COPYINGv2", dst="licenses", src=self.source_subfolder, ignore_case=True, keep_path=False)
-        self.copy("COPYING.LESSERv3", dst="licenses", src=self.source_subfolder, ignore_case=True, keep_path=False)
+        self.copy("COPYINGv2", dst="licenses", src=self.source_subfolder)
+        self.copy("COPYING.LESSERv3", dst="licenses", src=self.source_subfolder)
         self.copy(pattern="gmp.h", dst="include", src=self.source_subfolder)
         self.copy("FindGMP.cmake")
         if self.options.shared:

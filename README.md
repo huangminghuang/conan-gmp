@@ -1,8 +1,8 @@
 ## Package Status
 
-| Bintray | Appveyor | Travis |
-|---------|-----------|--------|
-[![Download](https://api.bintray.com/packages/bincrafters/public-conan/gmp%3Abincrafters/images/download.svg)](https://bintray.com/bincrafters/public-conan/gmp%3Abincrafters/_latestVersion)|None|[![Build Status](https://travis-ci.org/bincrafters/conan-gmp.svg?branch=stable%2F6.1.2)](https://travis-ci.org/bincrafters/conan-gmp)|
+| Bintray | Windows | Linux & macOS | 
+|:--------:|:---------:|:-----------------:|
+[![Download](https://api.bintray.com/packages/bincrafters/public-conan/gmp%3Abincrafters/images/download.svg)](https://bintray.com/bincrafters/public-conan/gmp%3Abincrafters/_latestVersion)|Not Supported|[![Build Status](https://travis-ci.org/bincrafters/conan-gmp.svg?branch=stable%2F6.1.2)](https://travis-ci.org/bincrafters/conan-gmp)|
 
 ## Conan.io Information
 
