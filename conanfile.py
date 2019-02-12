@@ -20,6 +20,8 @@ class GmpConan(ConanFile):
     default_options = "shared=False", "fPIC=True", "disable_assembly=True", "run_checks=False"
 
     def configure(self):
+        # Because this is pure C
+        del self.settings.compiler.libcxx
         if self.settings.compiler == "Visual Studio":
             raise tools.ConanException("The gmp package cannot be deployed on Visual Studio.")
 
